@@ -6,20 +6,22 @@ import { Queue } from "../common/queue";
 
 function fewestEdges(start: UGraphNodeStr, sought: UGraphNodeStr): number {
   const visited = new Set([start]);
-  const queue = new Queue([start]);
+  const queue = new Queue([{node: start, edges: 0}]);
   let minEdges = 0;
 
   while (!queue.isEmpty()) {
     minEdges = 0;
     const current = queue.dequeue();
 
-    if (current === sought) {
-      return minEdges;
+    if (current.node === sought) {
+      return current.edges;
     }
 
-    for (const node of current.adjacent) {
+    for (const node of current.node.adjacent) {
       if (!visited.has(node)) {
-        queue.enqueue(node);
+        const edges = current.edges++;
+        queue.enqueue({node, edges});
+        console.log(current.edges);
         minEdges++;
       }
     }
